@@ -1,0 +1,44 @@
+# Define the cockpit1 part
+name Cockpit 1
+shortname cockpit1
+author Dave Shuckerow
+
+MODULE:
+  mass 4
+  health 10
+  radiation 100
+  # Explosion size, then force
+  explosion 20 5
+  # Vectors in form X Y Z
+  hardpoint location 0 0 -0.6 forward 0 0 1 up 0 1 0
+
+RESOURCES:
+  crew 1
+  metal 100
+  time 30
+  fuel 0
+
+MODEL:
+  scale 0.02
+  shader Diffuse
+
+BOXCOLLIDER:
+  # Vector of form X Y Z
+  center 0 0 -0.1
+  size 1.25 1.25 0.6
+
+STABILIZER:
+  torque 0.5
+  damping 0.01
+
+COMMAND:
+  # Nothing to see here yet.
+
+WEAPON:
+  bullet Bullet1
+  muzzle 0 0 0.4
+  force 3
+
+CABIN:
+  crew 1
+

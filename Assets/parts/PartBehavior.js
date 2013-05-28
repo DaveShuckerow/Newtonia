@@ -8,8 +8,9 @@
 */
 
 #pragma strict
-var hardpointList : Vector3[];
-var forwardList : Vector3[];
+var hardpointList : Vector3[] = new Vector3[0];
+var forwardList : Vector3[] = new Vector3[0];
+var upList : Vector3[] = new Vector3[0];
 //var radialMount : int; // Not sure if we'll implement this
 var health : double;      // How much damage part can take before falling off
 var maxHealth;  

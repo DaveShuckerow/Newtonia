@@ -10,6 +10,7 @@
 import System.IO;
 import System;
 import PartBehavior;
+import OBJ;
 // Load a Part and return it.
 
 
@@ -19,10 +20,10 @@ import PartBehavior;
  */
 
 static function LoadPart(partname : String) : GameObject {
-	var file = ParseFile(Application.dataPath+"/mods/parts/"+partname+"/def.txt");
+	var file = ParseFile(Application.dataPath+"/../Parts/"+partname+"/def.txt");
 	var line = 0;
 	var pos = 0;
-	var obj = GameObject("new part") as GameObject;
+	var obj = GameObject("new "+partname) as GameObject;
 	obj.AddComponent("PartBehavior");
 	var prt = obj.GetComponent("PartBehavior") as PartBehavior;
 	obj.AddComponent("Rigidbody");
@@ -32,6 +33,7 @@ static function LoadPart(partname : String) : GameObject {
 	while (line < file.length) {
 		// Scan the file
 		var fl = (file[line] as Array).ToBuiltin(String);
+		Debug.Log(fl[0]);
 		if (fl[0] == "name") {
 			var unTokenized = new Array(fl);
 			unTokenized.RemoveAt(0);
@@ -50,9 +52,13 @@ static function LoadPart(partname : String) : GameObject {
 		
 		if (fl[0] == "MODULE:") {
 			// Read the module data.
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
 				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
 				if (fl[0] == "mass") {
 					prt.mass = Double.Parse(fl[1] as String);
 					obj.rigidbody.mass = prt.mass;
@@ -68,9 +74,10 @@ static function LoadPart(partname : String) : GameObject {
 				}
 				if (fl[0] == "hardpoint") {
 					pos = 1;
-					var loc : Vector3; var fw : Vector3;
+					var loc : Vector3; var fw : Vector3; var up : Vector3;
 					var a1 : Array = new Array(prt.hardpointList);
 					var a2 : Array = new Array(prt.forwardList);
+					var a3 : Array = new Array(prt.upList);
 					while (pos < fl.Length) {
 						if (fl[pos] == "location") {
 							loc = new Vector3(Double.Parse(fl[pos+1] as String),
@@ -83,13 +90,22 @@ static function LoadPart(partname : String) : GameObject {
 							                  Double.Parse(fl[pos+2] as String),
 							                  Double.Parse(fl[pos+3] as String));
 						}
+						if (fl[pos] == "up") {
+							up =  new Vector3(Double.Parse(fl[pos+1] as String),
+							                  Double.Parse(fl[pos+2] as String),
+							                  Double.Parse(fl[pos+3] as String));
+						}
 						pos += 1;
 					}
 					a1.Add(loc);
 					a2.Add(fw);
+					a3.Add(up);
 					prt.hardpointList = a1.ToBuiltin(Vector3) as Vector3[];
 					prt.forwardList = a2.ToBuiltin(Vector3) as Vector3[];
+					prt.upList = a3.ToBuiltin(Vector3) as Vector3[];
+					prt.connections = new PartBehavior[a1.length];
 				}
+				line += 1;
 			}
 		}
 		
@@ -97,11 +113,47 @@ static function LoadPart(partname : String) : GameObject {
 		
 		if (fl[0] == "RESOURCES:") {
 			// Read the resource data.
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
 				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
 				// TODO: FILL ME IN WITH A DYNAMIC RESOURCE ALLOCATION SYSTEM LATER.
+				line += 1;
 			}
+		}
+		
+		/* Read Model*/
+		
+		if (fl[0] == "MODEL:") {
+			//prt.gameObject.AddComponent(MeshRenderer);
+			//var objMesh : MeshFilter = prt.gameObject.AddComponent(MeshFilter);
+			//var importer : ObjImporter = new ObjImporter();
+			//objMesh.mesh = importer.ImportFile(Application.dataPath+"/../Parts/"+partname+"/model.obj");
+			line += 1;
+			var modelScale = 1.0;
+			var shaderList = Array();
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
+				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
+				if (fl[0] == "scale") {
+					modelScale = Double.Parse(fl[1]);
+				}
+				if (fl[0] == "shader") {
+					shaderList.Add(fl[1] as String);
+				}
+				line += 1;
+			}
+			obj.AddComponent(OBJ);
+			var objLoader : OBJ = obj.GetComponent(OBJ) as OBJ;
+			objLoader.MasterScale = modelScale;
+			objLoader.Shaders = shaderList.ToBuiltin(String) as String[];
+			objLoader.objPath = Application.dataPath+"/../Parts/"+partname+"/model.obj";
 		}
 		
 		/* Read Colliders*/
@@ -109,9 +161,13 @@ static function LoadPart(partname : String) : GameObject {
 		if (fl[0] == "BOXCOLLIDER:") {
 			var center: Vector3;
 			var size : Vector3;
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
 				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
 				if (fl[0] == "center") {
 					center = new Vector3(Double.Parse(fl[1] as String),
 										 Double.Parse(fl[2] as String),
@@ -122,6 +178,7 @@ static function LoadPart(partname : String) : GameObject {
 									   Double.Parse(fl[2] as String),
 									   Double.Parse(fl[3] as String));
 				}
+				line += 1;
 			}
 			obj.AddComponent("BoxCollider");
 			(obj.collider as BoxCollider).center = center;
@@ -131,9 +188,13 @@ static function LoadPart(partname : String) : GameObject {
 		if (fl[0] == "SPHERECOLLIDER:") {
 			center = new Vector3(0,0,0);
 			var radius: float;
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
 				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
 				if (fl[0] == "center") {
 					center = new Vector3(Double.Parse(fl[1] as String),
 										 Double.Parse(fl[2] as String),
@@ -142,6 +203,7 @@ static function LoadPart(partname : String) : GameObject {
 				if (fl[0] == "radius") {
 					radius = Double.Parse(fl[1] as String);
 				}
+				line += 1;
 			}
 			obj.AddComponent("SphereCollider");
 			(obj.collider as SphereCollider).center = center;
@@ -153,9 +215,13 @@ static function LoadPart(partname : String) : GameObject {
 			radius = 0.0;
 			var height : float;
 			var direction : int;
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
 				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
 				if (fl[0] == "center") {
 					center = new Vector3(Double.Parse(fl[1] as String),
 										 Double.Parse(fl[2] as String),
@@ -170,6 +236,7 @@ static function LoadPart(partname : String) : GameObject {
 				if (fl[0] == "direction") {
 					direction = int.Parse(fl[1] as String);
 				}
+				line += 1;
 			}
 			obj.AddComponent("CapsuleCollider");
 			(obj.collider as CapsuleCollider).center = center;
@@ -178,18 +245,23 @@ static function LoadPart(partname : String) : GameObject {
 			(obj.collider as CapsuleCollider).direction = direction;
 		}
 		
-		if (fl[0] == "NAV:") {
+		if (fl[0] == "STABILIZER:") {
 			var torque : double;
 			var damping : double;
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
 				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
 				if (fl[0] == "torque") {
 					torque = Double.Parse(fl[1] as String);
 				}
 				if (fl[0] == "damping") {
 					damping = Double.Parse(fl[1] as String);
 				}
+				line += 1;
 			}
 			obj.AddComponent("NavPart");
 			var nav : NavPart;
@@ -202,9 +274,13 @@ static function LoadPart(partname : String) : GameObject {
 			var thrust : double;
 			var canReverse : int;
 			damping = 0;
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
 				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
 				if (fl[0] == "thrust") {
 					thrust = Double.Parse(fl[1] as String);
 				}
@@ -214,6 +290,7 @@ static function LoadPart(partname : String) : GameObject {
 				if (fl[0] == "damping") {
 					damping = Double.Parse(fl[1] as String);
 				}
+				line += 1;
 			}
 			obj.AddComponent("EnginePart");
 			var eng : EnginePart;
@@ -231,11 +308,16 @@ static function LoadPart(partname : String) : GameObject {
 			var bullet : GameObject;
 			var muzzle : Vector3;
 			var force : double;
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
 				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
 				if (fl[0] == "bullet") {
-					bullet = new GameObject(fl[1] as String);
+					//bullet = new GameObject(fl[1] as String);
+					bullet = UnityEngine.Resources.Load("Weapons/"+fl[1] as String);
 				}
 				if (fl[0] == "muzzle") {
 					muzzle = new Vector3(Double.Parse(fl[1] as String),
@@ -245,6 +327,7 @@ static function LoadPart(partname : String) : GameObject {
 				if (fl[0] == "force") {
 					force = Double.Parse(fl[1] as String);
 				}
+				line += 1;
 			}
 			obj.AddComponent("WeaponPart");
 			var wpn : WeaponPart = obj.GetComponent("WeaponPart") as WeaponPart;
@@ -255,12 +338,17 @@ static function LoadPart(partname : String) : GameObject {
 		
 		if (fl[0] == "CABIN:") {
 			var crew : int;
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
 				fl = (file[line] as Array).ToBuiltin(String);
+				Debug.Log(fl[0]);
 				if (fl[0] == "crew") {
 					crew = Double.Parse(fl[1] as String);
 				}
+				line += 1;
 			}
 			obj.AddComponent("CrewPart");
 			var crw : CrewPart = obj.GetComponent("CrewPart") as CrewPart;
@@ -273,8 +361,12 @@ static function LoadPart(partname : String) : GameObject {
 			var maxSize : int;
 			var buildPos : Vector3;
 			var exitPos : Vector3;
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
+				Debug.Log(fl[0]);
 				fl = (file[line] as Array).ToBuiltin(String);
 				if (fl[0] == "size") {
 					minSize = int.Parse(fl[1] as String);
@@ -290,6 +382,7 @@ static function LoadPart(partname : String) : GameObject {
 										  Double.Parse(fl[2] as String),
 										  Double.Parse(fl[3] as String));
 				}
+				line += 1;
 			}
 			obj.AddComponent("BuildPart");
 			var bld : BuildPart = obj.GetComponent("BuildPart") as BuildPart;
@@ -305,8 +398,12 @@ static function LoadPart(partname : String) : GameObject {
 			var enterPos : Vector3;
 			var dockPos : Vector3;
 			exitPos = new Vector3(0,0,0);
-			while (fl[0] != "") {
-				line += 1;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
+				Debug.Log(fl[0]);
 				fl = (file[line] as Array).ToBuiltin(String);
 				if (fl[0] == "size") {
 					minSize = int.Parse(fl[1] as String);
@@ -327,6 +424,7 @@ static function LoadPart(partname : String) : GameObject {
 										  Double.Parse(fl[2] as String),
 										  Double.Parse(fl[3] as String));
 				}
+				line += 1;
 			}
 			obj.AddComponent("DockPart");
 			var dck : DockPart = obj.GetComponent("DockPart") as DockPart;
@@ -339,6 +437,11 @@ static function LoadPart(partname : String) : GameObject {
 		line += 1;
 	}
 	return obj;
+}
+static function PreloadParts() {
+    // Iterate over all folders from System.IO.Directory.GetDirectories(path)
+    var pList : String[] = Directory.GetDirectories(Application.dataPath+"/../Parts");
+    Debug.Log(new Array(pList));
 }
 
 static function ParseFile(filename : String) : Array {

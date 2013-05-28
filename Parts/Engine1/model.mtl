@@ -1,0 +1,18 @@
+# 
+# Wavefront material file
+# Created with Kaydara FBX
+# 
+
+newmtl Metal_Steel_Textured_
+map_Kd Metal_Steel_Textured_.jpg
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+illum 1
+Tr 1.000000
+
+newmtl Metal_Rusted_
+map_Kd Metal_Rusted_.jpg
+Ka 0.200000 0.200000 0.200000
+Kd 0.800000 0.800000 0.800000
+illum 1
+Tr 1.000000

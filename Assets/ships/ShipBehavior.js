@@ -34,6 +34,8 @@ var initialized;
 var maxTorque : double;
 var maxThrust : double;
 var mass : double;
+var myName : String;
+var myAuthor : String;
 
 function Start () {
 	initialized = false;

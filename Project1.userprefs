@@ -1,6 +1,16 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\plugins\OBJ.cs">
+    <Files>
+      <File FileName="Assets\parts\PartLoader.js" Line="151" Column="5" />
+      <File FileName="Assets\parts\PartTest.js" Line="8" Column="1" />
+      <File FileName="Assets\parts\PartBehavior.js" Line="58" Column="29" />
+      <File FileName="Assets\ships\ShipBehavior.js" Line="76" Column="1" />
+      <File FileName="Assets\parts\WeaponPart.js" Line="21" Column="2" />
+      <File FileName="Assets\camera\CameraRTSWatch.js" Line="55" Column="81" />
+      <File FileName="Assets\plugins\OBJ.cs" Line="568" Column="30" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

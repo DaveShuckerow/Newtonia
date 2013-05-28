@@ -1,0 +1,35 @@
+# Define the engine1 part
+name Engine 1
+shortname engine1
+author Dave Shuckerow
+
+MODULE:
+  mass 8
+  health 10
+  radiation 80
+  # Explosion size, then force
+  explosion 40 10
+  # Vectors in form X Y Z
+  hardpoint location 0 0 1.3 forward 0 0 1 up 0 1 0
+
+RESOURCES:
+  crew 0
+  metal 100
+  time 30
+  fuel 0
+
+MODEL:
+  scale 0.02
+  shader Diffuse
+  shader Diffuse
+
+BOXCOLLIDER:
+  # Vector of form X Y Z
+  center 0 0 0.3
+  size 1.25 1.25 2.5
+
+ENGINE:
+  thrust 10
+  reverse 1
+  damping 0.5
+
