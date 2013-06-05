@@ -11,13 +11,13 @@ import System.IO;
 import System;
 import PartBehavior;
 import OBJ;
+
+
 // Load a Part and return it.
 
-
-/*
- * Format for a part file:
- * No...go check the doc file...
- */
+static function GetPart(partname : String) : GameObject {
+	return LoadPart(partname);
+}
 
 static function LoadPart(partname : String) : GameObject {
 	var file = ParseFile(Application.dataPath+"/../Parts/"+partname+"/def.txt");

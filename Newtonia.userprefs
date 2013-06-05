@@ -1,8 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Standard Assets\Scripts\Utility Scripts\PIDController.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\parts\PartLoader.js">
     <Files>
-      <File FileName="Assets\Standard Assets\Scripts\Utility Scripts\PIDController.js" Line="8" Column="78" />
+      <File FileName="Assets\ships\ShipLoader.js" Line="13" Column="30" />
+      <File FileName="Assets\ships\ShipTemplate.js" Line="3" Column="20" />
+      <File FileName="Assets\parts\PartLoader.js" Line="12" Column="21" />
+      <File FileName="Assets\parts\PartTest.js" Line="20" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
