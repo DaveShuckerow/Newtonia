@@ -434,6 +434,40 @@ static function LoadPart(partname : String) : GameObject {
 			dck.dockPos = dockPos;
 			dck.exitPos = exitPos;
 		}
+		
+		if (fl[0] == "RESOURCING") {
+			var range : double = 0;
+			var capacity : double = 0;
+			var rate : double = 0;
+			var types : Resource = null;
+			line += 1;
+			while (line < file.length && (file[line] as Array).length > 1) {
+				Debug.Log(file[line]);
+				while ((file[line] as Array).length > 1 && (file[line] as Array)[0] == "")
+					(file[line] as Array).RemoveAt(0);
+				Debug.Log(fl[0]);
+				fl = (file[line] as Array).ToBuiltin(String);
+				if (fl[0] == "range") {
+					range = Double.Parse(fl[1] as String);
+				}
+				if (fl[0] == "capacity") {
+					capacity = Double.Parse(fl[1] as String);
+				}
+				if (fl[0] == "rate") {
+					rate = Double.Parse(fl[1] as String);
+				}
+				if (fl[0] == "types") {
+					// TODO: This.
+					types = null;
+				}
+			}
+			obj.AddComponent(ResourcePart);
+			var rsp : ResourcePart = obj.GetComponent(ResourcePart) as ResourcePart;
+			rsp.range = range;
+			rsp.capacity = capacity;
+			rsp.rate = rate;
+			rsp.resTypes = types;
+		}
 		line += 1;
 	}
 	return obj;

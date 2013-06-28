@@ -46,6 +46,8 @@
   <ItemGroup>
      <Compile Include="Assets\camera\CameraFPSWatch.js" />
      <Compile Include="Assets\camera\CameraRTSWatch.js" />
+     <Compile Include="Assets\mining\Resource.js" />
+     <Compile Include="Assets\mining\ResourceDeposit.js" />
      <Compile Include="Assets\parts\BuildPart.js" />
      <Compile Include="Assets\parts\CommandPart.js" />
      <Compile Include="Assets\parts\CrewPart.js" />
