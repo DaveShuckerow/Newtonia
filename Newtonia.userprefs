@@ -1,11 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+<<<<<<< HEAD
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Standard Assets\Scripts\Utility Scripts\PIDTakeTwo.js">
+    <Files>
+      <File FileName="Assets\Standard Assets\Scripts\Utility Scripts\PIDTakeTwo.js" Line="17" Column="24" />
+      <File FileName="Assets\Standard Assets\Scripts\Utility Scripts\PIDController.js" Line="6" Column="58" />
+=======
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\parts\PartLoader.js">
     <Files>
       <File FileName="Assets\parts\PartLoader.js" Line="465" Column="32" />
       <File FileName="Assets\mining\Resource.js" Line="6" Column="1" />
       <File FileName="Assets\mining\ResourceDeposit.js" Line="3" Column="44" />
       <File FileName="Assets\parts\ResourcePart.js" Line="1" Column="1" />
+>>>>>>> c7d0aff1af762a16afaeb1bc5e19baf44d5caa14
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
